@@ -6,7 +6,17 @@ import numpy as np
 from scipy.optimize import *
 
 """
+    This script calculates the parameters (alpha, omega, mu) of two non-linear equations for the argument values.
+    The problem is related to the AD campaign predictions.
     
+    The two functions are:
+        1. Upside-down normal distribution model.
+            A model to give an estimate for p11(k) in the future (people, who keep using brand A)
+        2. Normal distribution model.
+            A model to give an estimate for p12(k) in the future (people, who start using brand A)
+    
+    IN: p11(1) p11(2) p11(3) p12(1) p12(2) p12(3) maximum_retries
+    OUT: alpha11, mu11, sigma11, alpha12, mu12, sigma12
 """
 
 
@@ -38,9 +48,9 @@ def normal_distribution(params, k1, k2, k3, p1, p2, p3):
 
     sqrt_pi = sqrt(2 * pi)
     alpha_sqrt_pi_sigma_ = (alpha / (sqrt_pi * sigma))
-    result[0] = (alpha_sqrt_pi_sigma_ * (e ** ((-1 / 2) * pow((k1 - mu) / sigma, 2)))) - p1
-    result[1] = (alpha_sqrt_pi_sigma_ * (e ** ((-1 / 2) * pow((k2 - mu) / sigma, 2)))) - p2
-    result[2] = (alpha_sqrt_pi_sigma_ * (e ** ((-1 / 2) * pow((k3 - mu) / sigma, 2)))) - p3
+    result[0] = (alpha_sqrt_pi_sigma_ * (e ** ((-0.5) * pow((k1 - mu) / sigma, 2)))) - p1
+    result[1] = (alpha_sqrt_pi_sigma_ * (e ** ((-0.5) * pow((k2 - mu) / sigma, 2)))) - p2
+    result[2] = (alpha_sqrt_pi_sigma_ * (e ** ((-0.5) * pow((k3 - mu) / sigma, 2)))) - p3
     # result[2] = 1 - ((alpha / (sqrt_pi * sigma)) * (e ** ((-1 / 2) * pow((2 - mu) / sigma, 2)))) - 0.970
 
     return result
@@ -67,10 +77,10 @@ for i in range(0, max_tries):
     if ier == 1:
         break
 
-print("Return value\t\t" + str(ier))
-print("Message:\t\t" + str(mesg))
+print("Return value\t\t\t" + str(ier))
+print("Message:\t\t\t" + str(mesg))
 # print("Idk:\t\t" + str(infodict))
-print("Results:\t\t" + str(result_p11))
+print("Results for upside_down_normal_distribution (p11(k) -> alpha, mu, sigma):\n\t" + str(result_p11))
 if ier != 1:
     print("Out of luck.")
 
@@ -93,7 +103,7 @@ for i in range(0, max_tries):
 print("Return value\t\t" + str(ier))
 print("Message:\t\t" + str(mesg))
 # print("Idk:\t\t" + str(infodict))
-print("Results:\t\t" + str(result_p12))
+print("Results for normal_distribution (p12(k) -> alpha, mu, sigma):\n\t" + str(result_p12))
 
 if ier != 1:
     print("Out of luck.")

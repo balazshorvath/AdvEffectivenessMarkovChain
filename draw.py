@@ -5,6 +5,11 @@ from sys import argv
 import numpy as np
 import pylab as pl
 
+"""
+    After retrieving the parameters for the two models, this script will plot the results.
+    
+    IN: alpha11, mu11, sigma11, alpha12, mu12, sigma12
+"""
 alpha1 = float(argv[1])
 mu1 = float(argv[2])
 sigma1 = float(argv[3])
@@ -35,10 +40,17 @@ def upside_down_normal_distribution(k):
     return result
 
 
-result1 = normal_distribution(time)
-result2 = upside_down_normal_distribution(time)
+result1 = upside_down_normal_distribution(time)
+result2 = normal_distribution(time)
 pl.figure()
-pl.plot(time, result1), pl.grid()
-pl.figure()
-pl.plot(time, result2), pl.grid()
+pl.subplot(2, 1, 1)
+pl.plot(time, result1), pl.grid(True)
+pl.xlabel("$t$"), pl.ylabel("$p11(k)$")
+pl.title("$p_{11}(k)=1-\\frac{\\alpha}{\sqrt{(2\pi)}\sigma}e^{(-0.5(\\frac{k-\mu}{\sigma})^2)}$")
+pl.title("$\\alpha=" + str(alpha1) + ", \mu=" + str(mu1) + ", \sigma=" + str(sigma1) + "$", loc='right')
+pl.subplot(2, 1, 2)
+pl.plot(time, result2), pl.grid(True)
+pl.xlabel("$t$"), pl.ylabel("$p12(k)$")
+pl.title("$p_{12}(k)=\\frac{\\alpha}{\sqrt{(2\pi)}\sigma}e^{(-0.5(\\frac{k-\mu}{\sigma})^2)}$")
+pl.title("$\\alpha=" + str(alpha2) + ", \mu=" + str(mu2) + ", \sigma=" + str(sigma2) + "$", loc='right')
 pl.show()
