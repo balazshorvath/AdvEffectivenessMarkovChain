@@ -59,3 +59,5 @@ for i in interval:
         pl.axhline(y=overall_ratio, color='Green', linestyle='-')
         pl.pause(0.0001)
     # pl.show()
+
+pl.waitforbuttonpress()
