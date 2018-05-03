@@ -19,7 +19,7 @@ sigma2 = float(argv[6])
 
 alpha1_sqrt_pi_sigma1 = (alpha1 / (sqrt(2 * pi) * sigma1))
 alpha1_sqrt_pi_sigma2 = (alpha2 / (sqrt(2 * pi) * sigma2))
-time = pl.linspace(0, 30, 2000)
+time = pl.linspace(0, 30)
 
 pl.interactive(False)
 
@@ -42,7 +42,7 @@ def upside_down_normal_distribution(k):
 
 result1 = upside_down_normal_distribution(time)
 result2 = normal_distribution(time)
-pl.figure()
+pl.figure(1)
 pl.subplot(2, 1, 1)
 pl.plot(time, result1), pl.grid(True)
 pl.xlabel("$t$"), pl.ylabel("$p11(k)$")
@@ -53,4 +53,26 @@ pl.plot(time, result2), pl.grid(True)
 pl.xlabel("$t$"), pl.ylabel("$p12(k)$")
 pl.title("$p_{12}(k)=\\frac{\\alpha}{\sqrt{(2\pi)}\sigma}e^{(-0.5(\\frac{k-\mu}{\sigma})^2)}$")
 pl.title("$\\alpha=" + str(alpha2) + ", \mu=" + str(mu2) + ", \sigma=" + str(sigma2) + "$", loc='right')
+
+"""
+    TODO: Stationary market status should be around [0.43 0.57]T
+"""
+s0 = np.matrix([0.01, 0.99]).T
+time = range(30)
+
+result1 = upside_down_normal_distribution(time)
+result2 = normal_distribution(time)
+
+state_vectors = [s0]
+
+for i in time:
+    transition = np.matrix([[result1[i], result2[i]], [1-result1[i], 1-result2[i]]])
+    state_vectors.append(transition * state_vectors[i])
+    print("tmx: " + str(transition) + "\nstate(" + str(i) + "): " + str(state_vectors[i]) + "\nstate(" + str(i+1) + "): "
+          + str(state_vectors[i+1]))
+
+state_vectors = np.array(state_vectors)
+pl.figure(2)
+pl.plot(time, state_vectors[:30, 0, 0])
+pl.plot(time, state_vectors[:30, 1, 0])
 pl.show()

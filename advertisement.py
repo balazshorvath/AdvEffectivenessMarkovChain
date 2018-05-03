@@ -108,6 +108,3 @@ print("Results for normal_distribution (p12(k) -> alpha, mu, sigma):\n\t" + str(
 if ier != 1:
     print("Out of luck.")
 
-"""
-    TODO: Stationary market status should be [0.43 0.57]T
-"""
